@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ui_kit/ui_kit.dart';
 
@@ -38,13 +39,15 @@ class _CatalogPageState extends State<CatalogPage> {
   }
 
   void _open(ShowcaseItem item) {
+    final Widget page = item.fullPage
+        ? item.builder(context)
+        : ComponentDetailPage(
+            title: item.title,
+            child: item.builder(context),
+          );
+
     Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => ComponentDetailPage(
-          title: item.title,
-          child: item.builder(context),
-        ),
-      ),
+      CupertinoPageRoute<void>(builder: (_) => page),
     );
   }
 
@@ -66,6 +69,7 @@ class _CatalogPageState extends State<CatalogPage> {
   @override
   Widget build(BuildContext context) {
     final sections = _filtered;
+    final native26 = PlatformInfo.isIOS26OrHigher();
 
     return UiScaffold(
       title: 'ui_kit',
@@ -89,6 +93,13 @@ class _CatalogPageState extends State<CatalogPage> {
             hint: 'Search components',
             prefixIcon: LucideIcons.search,
             onChanged: (value) => setState(() => _query = value),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          UiText(
+            '${PlatformInfo.platformDescription}'
+            ' · liquidGlass=${native26 ? "ON" : "OFF (fallback Cupertino)"}',
+            style: UiTextStyle.labelSmall,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
           const SizedBox(height: AppSpacing.lg),
           if (sections.isEmpty)
@@ -195,7 +206,7 @@ class _CatalogTile extends StatelessWidget {
               child: UiText(title, style: UiTextStyle.bodyLarge),
             ),
             Icon(
-              Icons.chevron_right,
+              LucideIcons.chevronRight,
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
           ],

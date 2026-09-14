@@ -66,6 +66,7 @@ final List<ShowcaseSection> kShowcaseCatalog = [
     items: [
       ShowcaseItem(
         title: 'Scaffold / Bottom Nav',
+        fullPage: true,
         builder: (_) => const ScaffoldNavPreview(),
       ),
       ShowcaseItem(title: 'Tab View', builder: (_) => const TabViewPreview()),
@@ -575,44 +576,51 @@ class _ScaffoldNavPreviewState extends State<ScaffoldNavPreview> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 360,
-      child: ClipRRect(
-        borderRadius: AppRadius.cardAll,
-        child: UiScaffold(
-          title: 'Liquid Glass',
-          useNativeToolbar: true,
-          useNativeBottomBar: true,
-          safeTop: false,
-          safeBottom: false,
-          destinations: const [
-            UiNavDestination(
-              label: 'Home',
-              icon: Icons.home,
-              iosSymbol: 'house.fill',
-            ),
-            UiNavDestination(
-              label: 'Search',
-              icon: Icons.search,
-              iosSymbol: 'magnifyingglass',
-            ),
-            UiNavDestination(
-              label: 'Profile',
-              icon: Icons.person,
-              iosSymbol: 'person.fill',
-            ),
-          ],
-          selectedIndex: _index,
-          onDestinationSelected: (i) => setState(() => _index = i),
-          body: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(AppSpacing.lg),
-              child: UiText(
-                'Tab $_index — toolbar / tab bar natifs iOS 26+',
-                style: UiTextStyle.bodyLarge,
+    // Plein écran : une seule barre (Liquid Glass si iOS 26+), pas d'imbrication.
+    return UiScaffold(
+      title: 'Liquid Glass',
+      useNativeToolbar: true,
+      useNativeBottomBar: true,
+      destinations: const [
+        UiNavDestination(
+          label: 'Home',
+          icon: LucideIcons.home,
+          iosSymbol: 'house.fill',
+        ),
+        UiNavDestination(
+          label: 'Search',
+          icon: LucideIcons.search,
+          iosSymbol: 'magnifyingglass',
+        ),
+        UiNavDestination(
+          label: 'Profile',
+          icon: LucideIcons.user,
+          iosSymbol: 'person.fill',
+        ),
+      ],
+      selectedIndex: _index,
+      onDestinationSelected: (i) => setState(() => _index = i),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              UiText(
+                'Tab $_index',
+                style: UiTextStyle.titleLarge,
                 textAlign: TextAlign.center,
               ),
-            ),
+              const SizedBox(height: AppSpacing.sm),
+              UiText(
+                PlatformInfo.isIOS26OrHigher()
+                    ? 'Toolbar + tab bar natives (Liquid Glass)'
+                    : 'Fallback Cupertino (${PlatformInfo.platformDescription})',
+                style: UiTextStyle.bodyMedium,
+                textAlign: TextAlign.center,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ],
           ),
         ),
       ),

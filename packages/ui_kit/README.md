@@ -1,20 +1,31 @@
 # ui_kit
 
-Design system Flutter local, versionné dans ce monorepo.
+Design system Flutter versionné dans le monorepo [flutter-ui-kit](https://github.com/lecodeur228/flutter-ui-kit).
 
 Les widgets `Ui*` enveloppe [`adaptive_platform_ui`](https://pub.dev/packages/adaptive_platform_ui) :
 **iOS 26+ liquid glass**, **iOS legacy Cupertino**, **Android Material 3**.
 
 ## Installation
 
+### App externe (recommandé) — tag GitHub
+
+```yaml
+dependencies:
+  ui_kit:
+    git:
+      url: https://github.com/lecodeur228/flutter-ui-kit.git
+      path: packages/ui_kit
+      ref: v1.0.0
+```
+
+Repo privé : SSH (`git@github.com:lecodeur228/flutter-ui-kit.git`) ou credential GitHub.
+
+### Monorepo local — path
+
 ```yaml
 dependencies:
   ui_kit:
     path: ../../packages/ui_kit
-    # ou git:
-    # git:
-    #   url: https://github.com/lecodeur228/flutter-ui-kit.git
-    #   path: packages/ui_kit
 ```
 
 ## Quick start
@@ -73,7 +84,11 @@ UiApp(
 
 ## Versioning
 
-Bumper `version` dans `packages/ui_kit/pubspec.yaml` (semver), push → CI GitHub Actions.
+1. Bumper `version` dans `pubspec.yaml` + `CHANGELOG.md` (semver)
+2. Push `main` → CI
+3. `git tag vX.Y.Z && git push origin vX.Y.Z` → GitHub Release
+
+Pas de publication pub.dev (`publish_to: none`).
 
 ## Démo
 

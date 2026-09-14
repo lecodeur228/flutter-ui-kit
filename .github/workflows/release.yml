@@ -1,0 +1,80 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Validate · GitHub Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Pub get (ui_kit)
+        working-directory: packages/ui_kit
+        run: flutter pub get
+
+      - name: Analyze ui_kit
+        working-directory: packages/ui_kit
+        run: flutter analyze --fatal-infos
+
+      - name: Test ui_kit
+        working-directory: packages/ui_kit
+        run: flutter test
+
+      - name: Verify tag matches pubspec version
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          EXPECTED="${TAG#v}"
+          VERSION=$(grep -E '^version:' packages/ui_kit/pubspec.yaml | head -1 | awk '{print $2}' | tr -d '\r')
+          echo "Tag: $TAG → expected version: $EXPECTED"
+          echo "pubspec version: $VERSION"
+          if [ "$VERSION" != "$EXPECTED" ]; then
+            echo "::error::Tag $TAG does not match packages/ui_kit/pubspec.yaml version ($VERSION)"
+            exit 1
+          fi
+
+      - name: Extract changelog notes
+        id: notes
+        run: |
+          VERSION=$(grep -E '^version:' packages/ui_kit/pubspec.yaml | head -1 | awk '{print $2}' | tr -d '\r')
+          python3 << 'PY'
+          from pathlib import Path
+          version = Path("packages/ui_kit/pubspec.yaml").read_text().split("version:")[1].splitlines()[0].strip()
+          text = Path("packages/ui_kit/CHANGELOG.md").read_text()
+          lines = text.splitlines()
+          out = []
+          capture = False
+          for line in lines:
+              if line.startswith("## "):
+                  heading = line[3:].strip()
+                  if heading == version:
+                      capture = True
+                      continue
+                  if capture:
+                      break
+              elif capture:
+                  out.append(line)
+          body = "\n".join(out).strip() or f"Release ui_kit {version}"
+          Path("release_notes.md").write_text(body + "\n")
+          print(body[:500])
+          PY
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ui_kit ${{ github.ref_name }}
+          body_path: release_notes.md
+          generate_release_notes: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
