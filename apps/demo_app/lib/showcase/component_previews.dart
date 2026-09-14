@@ -26,6 +26,10 @@ final List<ShowcaseSection> kShowcaseCatalog = [
     items: [
       ShowcaseItem(title: 'Button', builder: (_) => const ButtonPreview()),
       ShowcaseItem(
+        title: 'Slide Button',
+        builder: (_) => const SlideButtonPreview(),
+      ),
+      ShowcaseItem(
         title: 'Icon Button',
         builder: (_) => const IconButtonPreview(),
       ),
@@ -335,58 +339,260 @@ class ButtonPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      spacing: AppSpacing.sm,
-      runSpacing: AppSpacing.sm,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        UiButton(label: 'Primary', onPressed: () {}),
+        UiText('CTA principal', style: UiTextStyle.labelMedium),
+        const SizedBox(height: AppSpacing.xs),
         UiButton(
-          label: 'Secondary',
-          variant: UiButtonVariant.secondary,
+          label: 'Continuer',
+          expanded: true,
+          icon: LucideIcons.arrowRight,
           onPressed: () {},
         ),
+        const SizedBox(height: AppSpacing.lg),
+        UiText('Slide to action', style: UiTextStyle.labelMedium),
+        const SizedBox(height: AppSpacing.xs),
+        UiSlideButton(
+          label: 'Glisser pour démarrer',
+          completedLabel: 'C’est parti !',
+          onCompleted: () {},
+        ),
+        const SizedBox(height: AppSpacing.lg),
+        UiText('Variantes', style: UiTextStyle.labelMedium),
+        const SizedBox(height: AppSpacing.xs),
+        Wrap(
+          spacing: AppSpacing.xs,
+          runSpacing: AppSpacing.xs,
+          children: [
+            UiButton(label: 'Primary', onPressed: () {}),
+            UiButton(
+              label: 'Secondary',
+              variant: UiButtonVariant.secondary,
+              onPressed: () {},
+            ),
+            UiButton(
+              label: 'Outline',
+              variant: UiButtonVariant.outline,
+              onPressed: () {},
+            ),
+            UiButton(
+              label: 'Ghost',
+              variant: UiButtonVariant.ghost,
+              onPressed: () {},
+            ),
+            UiButton(
+              label: 'Destructive',
+              variant: UiButtonVariant.destructive,
+              onPressed: () {},
+            ),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.lg),
+        UiText('États & tailles', style: UiTextStyle.labelMedium),
+        const SizedBox(height: AppSpacing.xs),
         UiButton(
-          label: 'Outline',
-          variant: UiButtonVariant.outline,
+          label: 'Chargement…',
+          expanded: true,
+          isLoading: true,
           onPressed: () {},
         ),
-        UiButton(
-          label: 'Ghost',
-          variant: UiButtonVariant.ghost,
-          onPressed: () {},
+        const SizedBox(height: AppSpacing.xs),
+        const UiButton(
+          label: 'Désactivé',
+          expanded: true,
         ),
-        UiButton(
-          label: 'Destructive',
-          variant: UiButtonVariant.destructive,
-          onPressed: () {},
-        ),
-        const UiButton(label: 'Loading', isLoading: true),
-        UiButton(
-          label: 'Small',
-          size: UiButtonSize.sm,
-          icon: Icons.add,
-          onPressed: () {},
+        const SizedBox(height: AppSpacing.sm),
+        Wrap(
+          spacing: AppSpacing.xs,
+          runSpacing: AppSpacing.xs,
+          children: [
+            UiButton(
+              label: 'Load outline',
+              variant: UiButtonVariant.outline,
+              isLoading: true,
+              onPressed: () {},
+            ),
+            const UiButton(
+              label: 'Off outline',
+              variant: UiButtonVariant.outline,
+            ),
+            UiButton(
+              label: 'Load soft',
+              variant: UiButtonVariant.secondary,
+              isLoading: true,
+              onPressed: () {},
+            ),
+            const UiButton(
+              label: 'Off soft',
+              variant: UiButtonVariant.secondary,
+            ),
+            UiButton(
+              label: 'Small',
+              size: UiButtonSize.sm,
+              icon: LucideIcons.plus,
+              onPressed: () {},
+            ),
+            UiButton(
+              label: 'Large',
+              size: UiButtonSize.lg,
+              onPressed: () {},
+            ),
+          ],
         ),
       ],
     );
   }
 }
 
+class SlideButtonPreview extends StatefulWidget {
+  const SlideButtonPreview({super.key});
+
+  @override
+  State<SlideButtonPreview> createState() => _SlideButtonPreviewState();
+}
+
+class _SlideButtonPreviewState extends State<SlideButtonPreview> {
+  var _last = '—';
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        UiText('Glisser pour confirmer', style: UiTextStyle.labelMedium),
+        const SizedBox(height: AppSpacing.xs),
+        UiSlideButton(
+          label: 'Glisser pour démarrer',
+          completedLabel: 'C’est parti !',
+          onCompleted: () => setState(() => _last = 'Trajet démarré'),
+        ),
+        const SizedBox(height: AppSpacing.lg),
+        UiText('Réservation', style: UiTextStyle.labelMedium),
+        const SizedBox(height: AppSpacing.xs),
+        UiSlideButton(
+          label: 'Glisser pour confirmer',
+          completedLabel: 'Confirmé',
+          thumbIcon: LucideIcons.circleCheck,
+          onCompleted: () => setState(() => _last = 'Réservation confirmée'),
+        ),
+        const SizedBox(height: AppSpacing.lg),
+        UiText('Désactivé', style: UiTextStyle.labelMedium),
+        const SizedBox(height: AppSpacing.xs),
+        const UiSlideButton(
+          label: 'Glisser pour payer',
+          enabled: false,
+          onCompleted: _noop,
+        ),
+        const SizedBox(height: AppSpacing.md),
+        UiText(
+          'Dernière action : $_last',
+          style: UiTextStyle.bodySmall,
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        ),
+      ],
+    );
+  }
+}
+
+void _noop() {}
+
 class IconButtonPreview extends StatelessWidget {
   const IconButtonPreview({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        UiIconButton(icon: Icons.favorite_border, onPressed: () {}),
-        UiIconButton(icon: Icons.share_outlined, onPressed: () {}),
-        UiIconButton(
-          icon: Icons.more_horiz,
-          iosSymbol: 'ellipsis.circle',
-          onPressed: () {},
+        UiText('Variantes', style: UiTextStyle.labelMedium),
+        const SizedBox(height: AppSpacing.xs),
+        Wrap(
+          spacing: AppSpacing.sm,
+          runSpacing: AppSpacing.sm,
+          children: [
+            UiIconButton(
+              icon: LucideIcons.heart,
+              variant: UiIconButtonVariant.primary,
+              tooltip: 'Favori',
+              onPressed: () {},
+            ),
+            UiIconButton(
+              icon: LucideIcons.share,
+              variant: UiIconButtonVariant.soft,
+              tooltip: 'Partager',
+              onPressed: () {},
+            ),
+            UiIconButton(
+              icon: LucideIcons.bell,
+              variant: UiIconButtonVariant.outline,
+              tooltip: 'Notifs',
+              onPressed: () {},
+            ),
+            UiIconButton(
+              icon: LucideIcons.ellipsis,
+              tooltip: 'Plus',
+              onPressed: () {},
+            ),
+          ],
         ),
-        const UiIconButton(icon: Icons.delete_outline),
+        const SizedBox(height: AppSpacing.lg),
+        UiText('Tailles', style: UiTextStyle.labelMedium),
+        const SizedBox(height: AppSpacing.xs),
+        Wrap(
+          spacing: AppSpacing.sm,
+          runSpacing: AppSpacing.sm,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            UiIconButton(
+              icon: LucideIcons.search,
+              variant: UiIconButtonVariant.soft,
+              size: UiIconButtonSize.sm,
+              onPressed: () {},
+            ),
+            UiIconButton(
+              icon: LucideIcons.search,
+              variant: UiIconButtonVariant.soft,
+              size: UiIconButtonSize.md,
+              onPressed: () {},
+            ),
+            UiIconButton(
+              icon: LucideIcons.search,
+              variant: UiIconButtonVariant.soft,
+              size: UiIconButtonSize.lg,
+              onPressed: () {},
+            ),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.lg),
+        UiText('États', style: UiTextStyle.labelMedium),
+        const SizedBox(height: AppSpacing.xs),
+        Wrap(
+          spacing: AppSpacing.sm,
+          runSpacing: AppSpacing.sm,
+          children: [
+            UiIconButton(
+              icon: LucideIcons.loader,
+              variant: UiIconButtonVariant.primary,
+              isLoading: true,
+              onPressed: () {},
+            ),
+            const UiIconButton(
+              icon: LucideIcons.trash2,
+              variant: UiIconButtonVariant.primary,
+              tooltip: 'Désactivé',
+            ),
+            const UiIconButton(
+              icon: LucideIcons.trash2,
+              variant: UiIconButtonVariant.outline,
+              tooltip: 'Désactivé outline',
+            ),
+            const UiIconButton(
+              icon: LucideIcons.trash2,
+              tooltip: 'Désactivé ghost',
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -400,16 +606,44 @@ class SwitchPreview extends StatefulWidget {
 }
 
 class _SwitchPreviewState extends State<SwitchPreview> {
-  bool _value = true;
+  bool _a = true;
+  bool _b = false;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       children: [
-        const Expanded(child: UiText('Notifications', style: UiTextStyle.bodyLarge)),
-        UiSwitch(
-          value: _value,
-          onChanged: (v) => setState(() => _value = v),
+        Row(
+          children: [
+            const Expanded(
+              child: UiText('Notifications', style: UiTextStyle.bodyLarge),
+            ),
+            UiSwitch(
+              value: _a,
+              onChanged: (v) => setState(() => _a = v),
+            ),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.md),
+        Row(
+          children: [
+            const Expanded(
+              child: UiText('Mode sombre auto', style: UiTextStyle.bodyLarge),
+            ),
+            UiSwitch(
+              value: _b,
+              onChanged: (v) => setState(() => _b = v),
+            ),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.md),
+        const Row(
+          children: [
+            Expanded(
+              child: UiText('Désactivé', style: UiTextStyle.bodyLarge),
+            ),
+            UiSwitch(value: false, onChanged: null),
+          ],
         ),
       ],
     );
@@ -430,27 +664,25 @@ class _CheckboxPreviewState extends State<CheckboxPreview> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            UiCheckbox(
-              value: _a,
-              onChanged: (v) => setState(() => _a = v ?? false),
-            ),
-            const SizedBox(width: AppSpacing.sm),
-            const UiText('Accepter les conditions'),
-          ],
+        UiCheckbox(
+          value: _a,
+          label: 'Accepter les conditions',
+          onChanged: (v) => setState(() => _a = v ?? false),
         ),
-        const SizedBox(height: AppSpacing.md),
-        Row(
-          children: [
-            UiCheckbox(
-              value: _b,
-              onChanged: (v) => setState(() => _b = v ?? false),
-            ),
-            const SizedBox(width: AppSpacing.sm),
-            const UiText('Recevoir la newsletter'),
-          ],
+        const SizedBox(height: AppSpacing.sm),
+        UiCheckbox(
+          value: _b,
+          label: 'Recevoir la newsletter',
+          onChanged: (v) => setState(() => _b = v ?? false),
+        ),
+        const SizedBox(height: AppSpacing.sm),
+        const UiCheckbox(
+          value: false,
+          label: 'Option désactivée',
+          enabled: false,
+          onChanged: null,
         ),
       ],
     );
@@ -471,24 +703,27 @@ class _RadioPreviewState extends State<RadioPreview> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        for (final option in _RadioOption.values)
-          Padding(
-            padding: const EdgeInsets.only(bottom: AppSpacing.sm),
-            child: Row(
-              children: [
-                UiRadio<_RadioOption>(
-                  value: option,
-                  groupValue: _selected,
-                  onChanged: (v) => setState(() => _selected = v!),
-                ),
-                const SizedBox(width: AppSpacing.sm),
-                UiText('Option ${option.name.toUpperCase()}'),
-              ],
+    return UiRadioGroup<_RadioOption>(
+      groupValue: _selected,
+      onChanged: (v) => setState(() => _selected = v!),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for (final option in _RadioOption.values) ...[
+            UiRadio<_RadioOption>(
+              value: option,
+              label: 'Option ${option.name.toUpperCase()}',
             ),
+            const SizedBox(height: AppSpacing.xs),
+          ],
+          const SizedBox(height: AppSpacing.sm),
+          const UiRadio<_RadioOption>(
+            value: _RadioOption.c,
+            label: 'Désactivé',
+            enabled: false,
           ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -544,20 +779,38 @@ class TextFieldPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       children: [
         UiTextField(
           label: 'Email',
           hint: 'vous@exemple.com',
-          prefixIcon: Icons.mail_outline,
+          prefixIcon: LucideIcons.mail,
         ),
-        SizedBox(height: AppSpacing.md),
+        const SizedBox(height: AppSpacing.md),
         UiTextField(
           label: 'Mot de passe',
           hint: '••••••••',
           obscureText: true,
-          prefixIcon: Icons.lock_outline,
+          prefixIcon: LucideIcons.lock,
           errorText: 'Minimum 8 caractères',
+        ),
+        const SizedBox(height: AppSpacing.md),
+        const UiTextField(
+          label: 'Désactivé',
+          hint: 'Non éditable',
+          enabled: false,
+          prefixIcon: LucideIcons.ban,
+        ),
+        const SizedBox(height: AppSpacing.lg),
+        UiText('TextFormField', style: UiTextStyle.labelMedium),
+        const SizedBox(height: AppSpacing.xs),
+        UiTextFormField(
+          label: 'Nom complet',
+          hint: 'Jean Dupont',
+          prefixIcon: LucideIcons.user,
+          validator: (v) =>
+              (v == null || v.trim().isEmpty) ? 'Champ requis' : null,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
         ),
       ],
     );
@@ -850,12 +1103,27 @@ class TextFormFieldPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Form(
-      child: UiTextFormField(
-        label: 'Nom',
-        hint: 'Votre nom',
-        prefixIcon: Icons.person_outline,
-        validator: (v) =>
-            (v == null || v.isEmpty) ? 'Champ requis' : null,
+      child: Column(
+        children: [
+          UiTextFormField(
+            label: 'Nom',
+            hint: 'Votre nom',
+            prefixIcon: LucideIcons.user,
+            validator: (v) =>
+                (v == null || v.isEmpty) ? 'Champ requis' : null,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+          ),
+          const SizedBox(height: AppSpacing.md),
+          UiTextFormField(
+            label: 'Téléphone',
+            hint: '+228 …',
+            prefixIcon: LucideIcons.phone,
+            keyboardType: TextInputType.phone,
+            validator: (v) =>
+                (v == null || v.length < 8) ? 'Numéro invalide' : null,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+          ),
+        ],
       ),
     );
   }

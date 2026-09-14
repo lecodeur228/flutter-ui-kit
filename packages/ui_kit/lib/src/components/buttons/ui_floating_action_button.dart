@@ -1,7 +1,7 @@
 import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
 import 'package:flutter/material.dart';
 
-/// FAB adaptatif.
+/// FAB Journey — couleur primary du thème.
 class UiFloatingActionButton extends StatelessWidget {
   const UiFloatingActionButton({
     super.key,
@@ -18,10 +18,13 @@ class UiFloatingActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return AdaptiveFloatingActionButton(
       onPressed: onPressed,
       mini: mini,
       tooltip: tooltip,
+      backgroundColor: scheme.primary,
+      foregroundColor: scheme.onPrimary,
       child: child,
     );
   }

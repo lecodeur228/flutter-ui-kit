@@ -82,7 +82,7 @@ abstract final class UiKitTheme {
         style: FilledButton.styleFrom(
           minimumSize: const Size(0, AppSizes.buttonMd),
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-          shape: RoundedRectangleBorder(borderRadius: AppRadius.buttonAll),
+          shape: const RoundedRectangleBorder(borderRadius: AppRadius.buttonAll),
           textStyle: textTheme.labelLarge,
           backgroundColor: colorScheme.primary,
           foregroundColor: colorScheme.onPrimary,
@@ -92,7 +92,7 @@ abstract final class UiKitTheme {
         style: OutlinedButton.styleFrom(
           minimumSize: const Size(0, AppSizes.buttonMd),
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-          shape: RoundedRectangleBorder(borderRadius: AppRadius.buttonAll),
+          shape: const RoundedRectangleBorder(borderRadius: AppRadius.buttonAll),
           side: BorderSide(color: colorScheme.outline, width: AppBorders.hairline),
           textStyle: textTheme.labelLarge,
         ),
@@ -101,7 +101,7 @@ abstract final class UiKitTheme {
         style: TextButton.styleFrom(
           minimumSize: const Size(0, AppSizes.buttonCompact),
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
-          shape: RoundedRectangleBorder(borderRadius: AppRadius.buttonAll),
+          shape: const RoundedRectangleBorder(borderRadius: AppRadius.buttonAll),
           textStyle: textTheme.labelLarge,
         ),
       ),

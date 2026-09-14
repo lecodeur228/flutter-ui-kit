@@ -14,13 +14,17 @@ class ComponentDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final topPad = PlatformInfo.isIOS26OrHigher()
+        ? MediaQuery.paddingOf(context).top + 52
+        : AppSpacing.sm;
+
     return UiScaffold(
       title: title,
       useNativeToolbar: true,
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(
+        padding: EdgeInsets.fromLTRB(
           AppSpacing.page,
-          AppSpacing.sm,
+          topPad,
           AppSpacing.page,
           AppSpacing.xxl,
         ),

@@ -80,9 +80,15 @@ class UiScaffold extends StatelessWidget {
     // Android Material Scaffold déjà inset — ne pas doubler.
     if (!PlatformInfo.isIOS) return body;
 
+    // Liquid glass iOS 26 : le contenu doit passer SOUS la toolbar native
+    // pour que le flou soit visible. Sinon la barre paraît opaque.
+    final underNativeToolbar =
+        useNativeToolbar && PlatformInfo.isIOS26OrHigher() && _hasAppBar;
+    final applyTopSafe = safeTop && !underNativeToolbar;
+
     final bottomInset = MediaQuery.paddingOf(context).bottom;
     return SafeArea(
-      top: safeTop,
+      top: applyTopSafe,
       bottom: safeBottom && !_hasBottomNav,
       left: true,
       right: true,
@@ -135,6 +141,8 @@ class UiScaffold extends StatelessWidget {
                   .toList(),
             ),
       floatingActionButton: floatingActionButton,
+      enableBlur: true,
+      enableToolbarGradient: true,
       body: _insetBody(context),
     );
   }

@@ -82,9 +82,11 @@ class _CatalogPageState extends State<CatalogPage> {
         ),
       ],
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(
+        padding: EdgeInsets.fromLTRB(
           AppSpacing.page,
-          AppSpacing.sm,
+          native26
+              ? MediaQuery.paddingOf(context).top + 52
+              : AppSpacing.sm,
           AppSpacing.page,
           AppSpacing.xxl,
         ),

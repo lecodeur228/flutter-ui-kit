@@ -1,6 +1,7 @@
 export 'buttons/ui_button.dart';
 export 'buttons/ui_floating_action_button.dart';
 export 'buttons/ui_icon_button.dart';
+export 'buttons/ui_slide_button.dart';
 export 'containers/ui_blur_view.dart';
 export 'containers/ui_card.dart';
 export 'content/ui_text.dart';

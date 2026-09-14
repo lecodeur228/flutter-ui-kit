@@ -1,7 +1,6 @@
-import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
-/// Switch adaptatif (UISwitch natif iOS 26+ / Cupertino / Material).
+/// Switch Journey — activeColor = primary du thème.
 class UiSwitch extends StatelessWidget {
   const UiSwitch({
     super.key,
@@ -16,10 +15,21 @@ class UiSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AdaptiveSwitch(
+    final scheme = Theme.of(context).colorScheme;
+    final active = activeColor ?? scheme.primary;
+
+    return Switch.adaptive(
       value: value,
       onChanged: onChanged,
-      activeColor: activeColor,
+      activeThumbColor: scheme.onPrimary,
+      activeTrackColor: active,
+      inactiveThumbColor: scheme.surface,
+      inactiveTrackColor: scheme.outlineVariant,
+      trackOutlineColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) return Colors.transparent;
+        return scheme.outline;
+      }),
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
     );
   }
 }

@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.2.0
+
+Composants Journey recustomisés (boutons + inputs).
+
+- `UiButton` / `UiIconButton` Material pill (primary, secondary, outline, ghost, destructive) + loading
+- `UiSlideButton` (slide-to-action)
+- `UiTextField` / `UiTextFormField` décoration Journey (radius 16, erreur, disabled)
+- `UiCheckbox` / `UiRadio` / `UiSwitch` avec labels optionnels et couleurs primary
+- `UiRadioGroup` (API Flutter `RadioGroup`) + `UiRadio` sans `groupValue` déprécié
+- Ajustements `UiScaffold` (safe area sous toolbar native iOS) + `AppRadius.input`
+- Catalogue demo mis à jour
+
 ## 1.1.0
 
 Design system **Journey** (Share Your Journey) — direction visuelle améliorée.
