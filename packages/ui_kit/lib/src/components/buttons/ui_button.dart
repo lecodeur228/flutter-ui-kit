@@ -1,16 +1,14 @@
+import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
 import 'package:flutter/material.dart';
 
-import '../../tokens/app_opacity.dart';
-import '../../tokens/app_radius.dart';
 import '../../tokens/app_sizes.dart';
 import '../../tokens/app_spacing.dart';
-import '../../theme/ui_kit_context.dart';
 
 enum UiButtonVariant { primary, secondary, outline, ghost, destructive }
 
 enum UiButtonSize { sm, md, lg }
 
-/// Bouton standard du design system.
+/// Bouton adaptatif (liquid glass iOS 26+ / Cupertino / Material).
 class UiButton extends StatelessWidget {
   const UiButton({
     super.key,
@@ -31,78 +29,84 @@ class UiButton extends StatelessWidget {
   final IconData? icon;
   final bool expanded;
 
-  double get _height => switch (size) {
-        UiButtonSize.sm => AppSizes.buttonSm,
-        UiButtonSize.md => AppSizes.buttonMd,
-        UiButtonSize.lg => AppSizes.buttonLg,
+  AdaptiveButtonStyle get _style => switch (variant) {
+        UiButtonVariant.primary || UiButtonVariant.destructive =>
+          AdaptiveButtonStyle.filled,
+        UiButtonVariant.secondary => AdaptiveButtonStyle.tinted,
+        UiButtonVariant.outline => AdaptiveButtonStyle.bordered,
+        UiButtonVariant.ghost => AdaptiveButtonStyle.plain,
       };
+
+  AdaptiveButtonSize get _size => switch (size) {
+        UiButtonSize.sm => AdaptiveButtonSize.small,
+        UiButtonSize.md => AdaptiveButtonSize.medium,
+        UiButtonSize.lg => AdaptiveButtonSize.large,
+      };
+
+  Color? _color(BuildContext context) {
+    if (variant == UiButtonVariant.destructive) {
+      return Theme.of(context).colorScheme.error;
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.uiColors;
     final enabled = onPressed != null && !isLoading;
+    final color = _color(context);
 
-    final (Color bg, Color fg, BorderSide? side) = switch (variant) {
-      UiButtonVariant.primary => (colors.primary, colors.onPrimary, null),
-      UiButtonVariant.secondary => (
-          colors.secondary,
-          colors.onSecondary,
-          null,
-        ),
-      UiButtonVariant.outline => (
-          Colors.transparent,
-          colors.primary,
-          BorderSide(color: colors.outline),
-        ),
-      UiButtonVariant.ghost => (Colors.transparent, colors.primary, null),
-      UiButtonVariant.destructive => (colors.error, colors.onError, null),
-    };
-
-    final child = Row(
-      mainAxisSize: expanded ? MainAxisSize.max : MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        if (isLoading) ...[
-          SizedBox(
-            width: AppSizes.iconSm,
-            height: AppSizes.iconSm,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              color: fg,
+    final Widget button;
+    if (isLoading) {
+      button = AdaptiveButton.child(
+        onPressed: null,
+        enabled: false,
+        style: _style,
+        size: _size,
+        color: color,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: AppSizes.iconSm,
+              height: AppSizes.iconSm,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
             ),
-          ),
-          const SizedBox(width: AppSpacing.sm),
-        ] else if (icon != null) ...[
-          Icon(icon, size: AppSizes.iconMd, color: fg),
-          const SizedBox(width: AppSpacing.sm),
-        ],
-        Text(label, style: context.uiText.labelLarge?.copyWith(color: fg)),
-      ],
-    );
-
-    return Opacity(
-      opacity: enabled ? 1 : AppOpacity.disabled,
-      child: Material(
-        color: bg,
-        borderRadius: AppRadius.buttonAll,
-        child: InkWell(
-          onTap: enabled ? onPressed : null,
-          borderRadius: AppRadius.buttonAll,
-          child: Container(
-            height: _height,
-            width: expanded ? double.infinity : null,
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-            decoration: side == null
-                ? null
-                : BoxDecoration(
-                    borderRadius: AppRadius.buttonAll,
-                    border: Border.fromBorderSide(side),
-                  ),
-            alignment: Alignment.center,
-            child: child,
-          ),
+            const SizedBox(width: AppSpacing.sm),
+            Text(label),
+          ],
         ),
-      ),
-    );
+      );
+    } else if (icon != null) {
+      button = AdaptiveButton.child(
+        onPressed: enabled ? onPressed : null,
+        enabled: enabled,
+        style: _style,
+        size: _size,
+        color: color,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: AppSizes.iconMd),
+            const SizedBox(width: AppSpacing.sm),
+            Text(label),
+          ],
+        ),
+      );
+    } else {
+      button = AdaptiveButton(
+        onPressed: enabled ? onPressed : null,
+        enabled: enabled,
+        label: label,
+        style: _style,
+        size: _size,
+        color: color,
+      );
+    }
+
+    if (!expanded) return button;
+    return SizedBox(width: double.infinity, child: button);
   }
 }

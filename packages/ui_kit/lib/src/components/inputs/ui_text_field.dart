@@ -1,9 +1,9 @@
+import 'package:adaptive_platform_ui/adaptive_platform_ui.dart';
 import 'package:flutter/material.dart';
 
-import '../../tokens/app_sizes.dart';
 import '../../tokens/app_spacing.dart';
 
-/// Champ texte standard du design system.
+/// Champ texte adaptatif (Cupertino iOS / Material Android).
 class UiTextField extends StatelessWidget {
   const UiTextField({
     super.key,
@@ -41,27 +41,33 @@ class UiTextField extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (label != null) ...[
-          Text(label!, style: Theme.of(context).textTheme.labelLarge),
+          Text(
+            label!,
+            style: Theme.of(context).textTheme.labelLarge,
+          ),
           const SizedBox(height: AppSpacing.xs),
         ],
-        SizedBox(
-          height: maxLines == 1 ? AppSizes.input : null,
-          child: TextField(
-            controller: controller,
-            obscureText: obscureText,
-            enabled: enabled,
-            keyboardType: keyboardType,
-            onChanged: onChanged,
-            onSubmitted: onSubmitted,
-            maxLines: maxLines,
-            decoration: InputDecoration(
-              hintText: hint,
-              errorText: errorText,
-              prefixIcon: prefixIcon == null ? null : Icon(prefixIcon),
-              suffixIcon: suffixIcon,
-            ),
-          ),
+        AdaptiveTextField(
+          controller: controller,
+          placeholder: hint,
+          obscureText: obscureText,
+          enabled: enabled,
+          keyboardType: keyboardType,
+          onChanged: onChanged,
+          onSubmitted: onSubmitted,
+          maxLines: maxLines,
+          prefixIcon: prefixIcon == null ? null : Icon(prefixIcon),
+          suffixIcon: suffixIcon,
         ),
+        if (errorText != null) ...[
+          const SizedBox(height: AppSpacing.xs),
+          Text(
+            errorText!,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.error,
+                ),
+          ),
+        ],
       ],
     );
   }

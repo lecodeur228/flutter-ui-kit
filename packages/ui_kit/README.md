@@ -1,39 +1,82 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# ui_kit
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/tools/pub/writing-package-pages).
+Design system Flutter local, versionné dans ce monorepo.
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/to/develop-packages).
--->
+Les widgets `Ui*` enveloppe [`adaptive_platform_ui`](https://pub.dev/packages/adaptive_platform_ui) :
+**iOS 26+ liquid glass**, **iOS legacy Cupertino**, **Android Material 3**.
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+## Installation
 
-## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
-
-## Usage
-
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
-
-```dart
-const like = 'sample';
+```yaml
+dependencies:
+  ui_kit:
+    path: ../../packages/ui_kit
+    # ou git:
+    # git:
+    #   url: https://github.com/lecodeur228/flutter-ui-kit.git
+    #   path: packages/ui_kit
 ```
 
-## Additional information
+## Quick start
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+```dart
+import 'package:ui_kit/ui_kit.dart';
+
+UiApp(
+  themeMode: ThemeMode.system,
+  home: UiScaffold(
+    title: 'Mon app',
+    useNativeToolbar: true,
+    useNativeBottomBar: true,
+    destinations: [
+      UiNavDestination(
+        label: 'Home',
+        icon: LucideIcons.home,
+        iosSymbol: 'house.fill',
+      ),
+    ],
+    body: Column(
+      children: [
+        UiButton(label: 'Continuer', onPressed: () {}),
+        UiPhoneField(
+          initialCountryCode: 'BJ',
+          onChanged: (phone) => print(phone.completeNumber),
+        ),
+      ],
+    ),
+  ),
+);
+```
+
+## Contenu
+
+### Fondations
+`AppColors`, `AppSpacing`, `AppRadius`, `AppSizes`, `AppTypography`, `AppElevation`, `AppBorders`, `AppOpacity`, `AppMotion`
+
+### Shell
+`UiApp`, `UiScaffold`, `UiKitTheme`, `context.uiKit` / `context.uiColors`
+
+### Contrôles
+`UiButton`, `UiIconButton`, `UiFloatingActionButton`, `UiSwitch`, `UiCheckbox`, `UiRadio`, `UiSlider`, `UiSegmentedControl`, `UiTextField`, `UiTextFormField`, `UiPhoneField`
+
+### Structure
+`UiTabView`, `UiFormSection`, `UiExpansionTile`, `UiListTile`, `UiDivider`
+
+### Overlays
+`UiDialog`, `UiSnackBar`, `UiDatePicker`, `UiTimePicker`, `UiContextMenu`, `UiPopupMenu`, `UiTooltip`
+
+### Contenu
+`UiCard`, `UiBlurView`, `UiText`, `UiBadge`, `UiCountBadge`
+
+### Icônes
+[Lucide](https://lucide.dev) — `UiIcon(LucideIcons.home)` / `UiIcons.search`
+
+## Versioning
+
+Bumper `version` dans `packages/ui_kit/pubspec.yaml` (semver), push → CI GitHub Actions.
+
+## Démo
+
+```bash
+cd apps/demo_app && flutter run
+```
