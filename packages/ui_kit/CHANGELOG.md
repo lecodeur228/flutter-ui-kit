@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.1.0
+
+Design system **Journey** (Share Your Journey) — direction visuelle améliorée.
+
+- Palette vert route `#0D9F6E` + marine `#1E3A5F` (light/dark dédiés)
+- Canvas teinté, bordures vertes, feedback ambre / danger affinés
+- Typo **Plus Jakarta Sans** (`google_fonts`)
+- Spacing 4-based, radius réguliers, CTA 52px
+- Helpers sémantiques `context.textBody` / `textHero` / `textPrice`…
+
 ## 1.0.0
 
 Première release stable du design system.

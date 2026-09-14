@@ -8,7 +8,7 @@ import '../tokens/app_spacing.dart';
 import '../tokens/app_typography.dart';
 import 'ui_kit_colors.dart';
 
-/// Thèmes light / dark du design system.
+/// Thèmes light / dark Journey.
 abstract final class UiKitTheme {
   static ThemeData get light => _build(
         brightness: Brightness.light,
@@ -19,6 +19,7 @@ abstract final class UiKitTheme {
           primaryContainer: AppColors.primaryContainer,
           secondary: AppColors.secondary,
           onSecondary: AppColors.onSecondary,
+          secondaryContainer: AppColors.secondaryContainer,
           error: AppColors.error,
           onError: AppColors.onError,
           surface: AppColors.surfaceLight,
@@ -35,13 +36,14 @@ abstract final class UiKitTheme {
         brightness: Brightness.dark,
         kitColors: UiKitColors.dark,
         colorScheme: const ColorScheme.dark(
-          primary: AppColors.primary,
-          onPrimary: AppColors.onPrimary,
-          primaryContainer: Color(0xFF1A3A6E),
-          secondary: AppColors.secondary,
-          onSecondary: AppColors.onSecondary,
-          error: AppColors.error,
-          onError: AppColors.onError,
+          primary: AppColors.primaryDark,
+          onPrimary: AppColors.onPrimaryDark,
+          primaryContainer: AppColors.primaryContainerDark,
+          secondary: AppColors.secondaryDark,
+          onSecondary: AppColors.onSecondaryDark,
+          secondaryContainer: AppColors.secondaryContainerDark,
+          error: AppColors.errorDark,
+          onError: AppColors.onErrorDark,
           surface: AppColors.surfaceDark,
           onSurface: AppColors.onSurfaceDark,
           onSurfaceVariant: AppColors.onSurfaceVariantDark,
@@ -66,26 +68,30 @@ abstract final class UiKitTheme {
       colorScheme: colorScheme,
       scaffoldBackgroundColor: scaffoldBackground,
       textTheme: textTheme,
+      fontFamily: AppTypography.fontFamily,
       extensions: <ThemeExtension<dynamic>>[kitColors],
       appBarTheme: AppBarTheme(
         elevation: 0,
+        scrolledUnderElevation: 0,
         centerTitle: false,
         backgroundColor: scaffoldBackground,
         foregroundColor: colorScheme.onSurface,
-        titleTextStyle: textTheme.titleLarge,
+        titleTextStyle: textTheme.titleMedium?.copyWith(fontSize: 18),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           minimumSize: const Size(0, AppSizes.buttonMd),
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
           shape: RoundedRectangleBorder(borderRadius: AppRadius.buttonAll),
           textStyle: textTheme.labelLarge,
+          backgroundColor: colorScheme.primary,
+          foregroundColor: colorScheme.onPrimary,
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           minimumSize: const Size(0, AppSizes.buttonMd),
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
           shape: RoundedRectangleBorder(borderRadius: AppRadius.buttonAll),
           side: BorderSide(color: colorScheme.outline, width: AppBorders.hairline),
           textStyle: textTheme.labelLarge,
@@ -93,8 +99,8 @@ abstract final class UiKitTheme {
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          minimumSize: const Size(0, AppSizes.buttonMd),
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+          minimumSize: const Size(0, AppSizes.buttonCompact),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
           shape: RoundedRectangleBorder(borderRadius: AppRadius.buttonAll),
           textStyle: textTheme.labelLarge,
         ),
@@ -103,8 +109,8 @@ abstract final class UiKitTheme {
         filled: true,
         fillColor: colorScheme.surface,
         contentPadding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.lg,
-          vertical: AppSpacing.md,
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.sm,
         ),
         border: OutlineInputBorder(
           borderRadius: AppRadius.inputAll,

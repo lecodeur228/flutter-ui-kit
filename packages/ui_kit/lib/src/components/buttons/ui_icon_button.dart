@@ -10,8 +10,8 @@ class UiIconButton extends StatelessWidget {
     required this.icon,
     this.onPressed,
     this.tooltip,
-    this.size = AppSizes.buttonMd,
-    this.iconSize = AppSizes.iconLg,
+    this.size = AppSizes.buttonCompact,
+    this.iconSize = AppSizes.iconMd,
     this.iosSymbol,
   });
 

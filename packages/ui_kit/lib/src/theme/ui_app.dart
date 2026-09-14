@@ -56,7 +56,7 @@ class UiApp extends StatelessWidget {
     final isDark = brightness == Brightness.dark;
     return CupertinoThemeData(
       brightness: brightness,
-      primaryColor: AppColors.primary,
+      primaryColor: isDark ? AppColors.primaryDark : AppColors.primary,
       scaffoldBackgroundColor:
           isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
       barBackgroundColor:
