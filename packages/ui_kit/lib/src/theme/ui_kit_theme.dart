@@ -8,9 +8,10 @@ import '../tokens/app_spacing.dart';
 import '../tokens/app_typography.dart';
 import 'ui_kit_colors.dart';
 
-/// Thèmes light / dark Journey.
+/// Thèmes light / dark — presets Journey + factory multi-marque.
 abstract final class UiKitTheme {
-  static ThemeData get light => _build(
+  /// Preset Journey (Share Your Journey).
+  static ThemeData get light => from(
         brightness: Brightness.light,
         kitColors: UiKitColors.light,
         colorScheme: const ColorScheme.light(
@@ -32,7 +33,8 @@ abstract final class UiKitTheme {
         scaffoldBackground: AppColors.backgroundLight,
       );
 
-  static ThemeData get dark => _build(
+  /// Preset Journey dark.
+  static ThemeData get dark => from(
         brightness: Brightness.dark,
         kitColors: UiKitColors.dark,
         colorScheme: const ColorScheme.dark(
@@ -54,21 +56,33 @@ abstract final class UiKitTheme {
         scaffoldBackground: AppColors.backgroundDark,
       );
 
-  static ThemeData _build({
+  /// Construit un [ThemeData] ui_kit à partir d'une marque custom.
+  ///
+  /// Les presets [light] / [dark] délèguent ici. Les apps multi-marque
+  /// (ex. Rede) passent leur [ColorScheme], [UiKitColors] et optionnellement
+  /// une [TextTheme] / [fontFamily] (Inter, etc.).
+  static ThemeData from({
     required Brightness brightness,
     required UiKitColors kitColors,
     required ColorScheme colorScheme,
     required Color scaffoldBackground,
+    TextTheme? textTheme,
+    String? fontFamily,
   }) {
-    final textTheme = AppTypography.textTheme(color: colorScheme.onSurface);
+    var resolvedTextTheme =
+        textTheme ?? AppTypography.textTheme(color: colorScheme.onSurface);
+    if (fontFamily != null) {
+      resolvedTextTheme = resolvedTextTheme.apply(fontFamily: fontFamily);
+    }
+    final resolvedFontFamily = fontFamily ?? AppTypography.fontFamily;
 
     return ThemeData(
       useMaterial3: true,
       brightness: brightness,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: scaffoldBackground,
-      textTheme: textTheme,
-      fontFamily: AppTypography.fontFamily,
+      textTheme: resolvedTextTheme,
+      fontFamily: resolvedFontFamily,
       extensions: <ThemeExtension<dynamic>>[kitColors],
       appBarTheme: AppBarTheme(
         elevation: 0,
@@ -76,14 +90,14 @@ abstract final class UiKitTheme {
         centerTitle: false,
         backgroundColor: scaffoldBackground,
         foregroundColor: colorScheme.onSurface,
-        titleTextStyle: textTheme.titleMedium?.copyWith(fontSize: 18),
+        titleTextStyle: resolvedTextTheme.titleMedium?.copyWith(fontSize: 18),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           minimumSize: const Size(0, AppSizes.buttonMd),
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
           shape: const RoundedRectangleBorder(borderRadius: AppRadius.buttonAll),
-          textStyle: textTheme.labelLarge,
+          textStyle: resolvedTextTheme.labelLarge,
           backgroundColor: colorScheme.primary,
           foregroundColor: colorScheme.onPrimary,
         ),
@@ -94,7 +108,7 @@ abstract final class UiKitTheme {
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
           shape: const RoundedRectangleBorder(borderRadius: AppRadius.buttonAll),
           side: BorderSide(color: colorScheme.outline, width: AppBorders.hairline),
-          textStyle: textTheme.labelLarge,
+          textStyle: resolvedTextTheme.labelLarge,
         ),
       ),
       textButtonTheme: TextButtonThemeData(
@@ -102,7 +116,7 @@ abstract final class UiKitTheme {
           minimumSize: const Size(0, AppSizes.buttonCompact),
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
           shape: const RoundedRectangleBorder(borderRadius: AppRadius.buttonAll),
-          textStyle: textTheme.labelLarge,
+          textStyle: resolvedTextTheme.labelLarge,
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(

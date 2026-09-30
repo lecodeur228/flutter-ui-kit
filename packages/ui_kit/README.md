@@ -59,6 +59,24 @@ UiApp(
 );
 ```
 
+### Marque custom (ex. Rede)
+
+Les presets `UiKitTheme.light` / `.dark` sont Journey. Pour une autre marque,
+passer palette + typo via `UiKitTheme.from` puis wrapper dans l’app :
+
+```dart
+final theme = UiKitTheme.from(
+  brightness: Brightness.light,
+  colorScheme: ColorScheme.light(primary: Color(0xFFFF8C61), ...),
+  kitColors: UiKitColors(...),
+  scaffoldBackground: Color(0xFFF5F7F5),
+  textTheme: myInterTextTheme,
+  fontFamily: 'Inter',
+);
+
+MaterialApp(theme: theme, ...); // ou GetMaterialApp — pas besoin de UiApp
+```
+
 ## Contenu
 
 ### Fondations

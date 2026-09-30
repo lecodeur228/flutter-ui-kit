@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.0
+
+API multi-marque pour réutiliser les composants `Ui*` hors Journey.
+
+- `UiKitTheme.from(...)` — construit un `ThemeData` à partir d'un `ColorScheme`,
+  `UiKitColors`, fond scaffold, et optionnellement `TextTheme` / `fontFamily`
+- Presets `UiKitTheme.light` / `.dark` inchangés (délèguent à `from`)
+
 ## 1.2.0
 
 Composants Journey recustomisés (boutons + inputs).

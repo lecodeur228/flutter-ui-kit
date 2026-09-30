@@ -80,4 +80,18 @@ void main() {
     await tester.pumpAndSettle();
     expect(kit.success, AppColors.success);
   });
+
+  test('UiKitTheme.from accepte une palette custom', () {
+    const primary = Color(0xFFFF8C61);
+    final theme = UiKitTheme.from(
+      brightness: Brightness.light,
+      kitColors: UiKitColors.light.copyWith(primarySoft: Color(0xFFFFF0EB)),
+      colorScheme: const ColorScheme.light(primary: primary),
+      scaffoldBackground: const Color(0xFFF5F7F5),
+      fontFamily: 'Inter',
+    );
+    expect(theme.colorScheme.primary, primary);
+    expect(theme.textTheme.bodyLarge?.fontFamily, 'Inter');
+    expect(theme.scaffoldBackgroundColor, const Color(0xFFF5F7F5));
+  });
 }
